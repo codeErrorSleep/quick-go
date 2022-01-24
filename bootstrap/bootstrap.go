@@ -1,17 +1,47 @@
 package bootstrap
 
 import (
-	"fmt"
+	"flag"
 	"github.com/spf13/viper"
 	"log"
 	"quick-go/bootstrap/conf"
 )
 
+var cmdEnv struct {
+	Env  string
+	Port int64
+}
+
 // RegisterConfig 初始化配置
 func RegisterConfig() error {
-	// todo 通过环境变量指定
+	// 读取命令行参数
+	registerCmdEnvConfig()
+
+	// 读取配置的conf文件
+	err := registerEnvConfig()
+	if err != nil {
+		return err
+	}
+
+	// 设置一下其他的变量
+	conf.Env.Set("port", cmdEnv.Port)
+
+	return nil
+}
+
+// 读取命令行参数
+func registerCmdEnvConfig() {
+	envFile := flag.String("e", "config", "配置文件")
+	port := flag.Int64("p", 8080, "启动端口")
+	flag.Parse()
+	cmdEnv.Env = *envFile
+	cmdEnv.Port = *port
+}
+
+// 读取config配置文件
+func registerEnvConfig() error {
 	viperObj := viper.New()
-	viperObj.SetConfigName("configs/config")
+	viperObj.SetConfigName("configs/" + cmdEnv.Env)
 	viperObj.SetConfigType("yaml")
 	viperObj.AddConfigPath(".")
 	err := viperObj.ReadInConfig()
@@ -19,12 +49,6 @@ func RegisterConfig() error {
 		log.Fatal("read config failed: %v", err)
 		return err
 	}
-
-	conf.Conf = viperObj
-
-	fmt.Println(conf.Conf.Get("db_mysql01"))
-	ff := conf.Conf.Get("db_mysql01")
-	fmt.Println(ff)
-
+	conf.Env = viperObj
 	return nil
 }
