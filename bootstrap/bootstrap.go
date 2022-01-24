@@ -49,6 +49,8 @@ func registerEnvConfig() error {
 		log.Fatal("read config failed: %v", err)
 		return err
 	}
+	// 监听配置修改
+	viperObj.WatchConfig()
 	conf.Env = viperObj
 	return nil
 }
