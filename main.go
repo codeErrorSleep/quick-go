@@ -1,7 +1,9 @@
 package main
 
 import (
+	"go.uber.org/zap"
 	"quick-go/bootstrap"
+	"quick-go/bootstrap/conf"
 )
 
 func main() {
@@ -16,4 +18,7 @@ func main() {
 	if err != nil {
 		print(err.Error())
 	}
+
+	conf.InfoLogger.Info("test", zap.Any("fsdfds", "fffff"))
+
 }
