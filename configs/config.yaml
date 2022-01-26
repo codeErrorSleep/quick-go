@@ -4,4 +4,10 @@ dockerMysql:
   dbname: test
   pwd: 123456
 
-port:
+
+
+# 开发的端口
+port: 8080
+
+# 日志记录的目录
+logPath: ./log/
