@@ -10,4 +10,4 @@ dockerMysql:
 port: 8080
 
 # 日志记录的目录
-logPath: ./log/
+logPath: ./logs/

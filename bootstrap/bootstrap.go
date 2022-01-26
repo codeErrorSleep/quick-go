@@ -20,13 +20,13 @@ var cmdEnv struct {
 func RegisterLog() error {
 	// 注册zap日志
 	ErrorLogger := initLogger("error.log", "info")
+	conf.ErrorLogger = ErrorLogger
 	DebugLogger := initLogger("debug.log", "debug")
+	conf.DebugLogger = DebugLogger
 	InfoLogger := initLogger("info.log", "info")
+	conf.InfoLogger = InfoLogger
 	CallLogger := initLogger("call.log", "info")
 	conf.CallLogger = CallLogger
-	conf.InfoLogger = InfoLogger
-	conf.DebugLogger = DebugLogger
-	conf.ErrorLogger = ErrorLogger
 	return nil
 }
 
@@ -67,7 +67,7 @@ func initLogger(logPath string, loglevel string) *zap.Logger {
 		level,
 	)
 
-	logger := zap.New(core)
+	logger := zap.New(core, zap.AddCaller())
 	logger.Info(logPath + "初始化成功")
 
 	return logger
