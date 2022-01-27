@@ -15,8 +15,8 @@ var cmdEnv struct {
 	Port int64
 }
 
-// RegisterConfig 初始化配置
-func RegisterConfig() error {
+// InitConfig 初始化配置
+func InitConfig() error {
 	// 读取命令行参数
 	registerCmdEnvConfig()
 
@@ -44,7 +44,7 @@ func registerCmdEnvConfig() {
 // 读取config配置文件
 func registerEnvConfig() error {
 	viperObj := viper.New()
-	viperObj.SetConfigName("configs/" + cmdEnv.Env)
+	viperObj.SetConfigName("conf/" + cmdEnv.Env)
 	viperObj.SetConfigType("yaml")
 	viperObj.AddConfigPath(".")
 	err := viperObj.ReadInConfig()

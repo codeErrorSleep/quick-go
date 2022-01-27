@@ -15,8 +15,8 @@ var (
 	CallLogger  *zap.Logger
 )
 
-// RegisterLog 初始化链接
-func RegisterLog() error {
+// InitLog 初始化链接
+func InitLog() error {
 	// 注册zap日志
 	ErrorLogger = initLogger("error.log", "info")
 	DebugLogger = initLogger("debug.log", "debug")
