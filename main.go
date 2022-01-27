@@ -1,8 +1,8 @@
 package main
 
 import (
-	"quick-go/bootstrap/conf"
-	"quick-go/bootstrap/log"
+	"quick-go/conf"
+	"quick-go/log"
 )
 
 func main() {
