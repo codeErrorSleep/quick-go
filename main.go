@@ -7,6 +7,7 @@ import (
 )
 
 func main() {
+
 	// 1.读取配置相关的信息
 	err := conf.InitConfig()
 	if err != nil {
@@ -30,4 +31,11 @@ func main() {
 	if err != nil {
 		print(err.Error())
 	}
+
+	// 5.创建kafka连接
+	err = db.InitKafka()
+	if err != nil {
+		print(err.Error())
+	}
+
 }
