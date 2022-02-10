@@ -9,7 +9,9 @@ redisLocal:
   password:
   port: 6390
 
-
+localKafka:
+  addr: localhost:9092
+  topic: test
 
 # 开发的端口
 port: 8080

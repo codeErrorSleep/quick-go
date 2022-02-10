@@ -6,10 +6,7 @@ go web 快速上手开发的脚手架
 gin+gorm
 
 # todo
-- 配置读取,配置热更新
-- 命令行读取
-- 日志,日志分隔
-- 数据库连接
-- redis
-- gin
-
+- 开启的资源guanbi
+- kafka测试
+- gin合成
+- sw...接口文档
