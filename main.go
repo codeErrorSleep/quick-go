@@ -4,6 +4,7 @@ import (
 	"quick-go/conf"
 	"quick-go/db"
 	"quick-go/log"
+	"quick-go/routers"
 )
 
 func main() {
@@ -37,5 +38,9 @@ func main() {
 	if err != nil {
 		print(err.Error())
 	}
+
+	// 6.注册路由
+	r := routers.InitApiRouter(false)
+	r.Run(":" + conf.Env.GetString("port"))
 
 }

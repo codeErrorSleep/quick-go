@@ -9,10 +9,10 @@ import (
 
 var (
 	// 日志
-	ErrorLogger *zap.Logger
-	DebugLogger *zap.Logger
-	InfoLogger  *zap.Logger
-	CallLogger  *zap.Logger
+	ErrorLogger   *zap.Logger
+	DebugLogger   *zap.Logger
+	RequestLogger *zap.Logger
+	CallLogger    *zap.Logger
 )
 
 // InitLog 初始化链接
@@ -20,7 +20,7 @@ func InitLog() error {
 	// 注册zap日志
 	ErrorLogger = initLogger("error.log", "info")
 	DebugLogger = initLogger("debug.log", "debug")
-	InfoLogger = initLogger("info.log", "info")
+	RequestLogger = initLogger("request.log", "info")
 	CallLogger = initLogger("call.log", "info")
 	return nil
 }
