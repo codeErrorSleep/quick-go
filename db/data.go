@@ -25,7 +25,7 @@ var (
 
 func InitMysql() (err error) {
 	// 建立 MySQL 连接
-	LocalMysql, err = mysqlConnect("TEST", "dbLocal")
+	LocalMysql, err = mysqlConnect("db_goods_center", "dbLocal")
 	if err != nil {
 		return err
 	}
