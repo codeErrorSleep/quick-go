@@ -1,4 +1,4 @@
-package data
+package models
 
 // 商品sku表
 type Sku struct {

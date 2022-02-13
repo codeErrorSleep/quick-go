@@ -1,6 +1,9 @@
-package data
+package models
 
-import "time"
+import (
+	"quick-go/db"
+	"time"
+)
 
 type Spu struct {
 	ID                  uint64    `gorm:"primaryKey;column:id;type:bigint(20) unsigned;not null" json:"-"`
@@ -65,4 +68,19 @@ type Spu struct {
 func (spu *Spu) TableName(appId string) string {
 	num := appId[len(appId)-1 : len(appId)]
 	return "t_spu_" + num
+}
+
+func (spu *Spu) GetSpuDetail(appId string, spuId string) (spuDetail Spu, err error) {
+	query := db.LocalMysql.
+		Table(spu.TableName(appId)).
+		Where("app_id = ?", appId).
+		Where("spu_id = ?", spuId).
+		Where("is_deleted = ?", 0)
+
+	err = query.First(&spuDetail).Error
+
+	if err != nil {
+		return spuDetail, err
+	}
+	return
 }
