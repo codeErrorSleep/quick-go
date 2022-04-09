@@ -6,7 +6,11 @@ go web 快速上手开发的脚手架
 gin+gorm
 
 # todo
+- sw...接口文档
+- dockerfile支持
+
+
+# done
 - 开启的资源guanbi
 - kafka测试
 - gin合成
-- sw...接口文档
