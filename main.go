@@ -5,9 +5,12 @@ import (
 	"quick-go/db"
 	"quick-go/log"
 	"quick-go/routers"
+
+	"go.uber.org/zap"
 )
 
 func main() {
+	defer resourceCloser()
 
 	// 1.读取配置相关的信息
 	err := conf.InitConfig()
@@ -26,7 +29,6 @@ func main() {
 	if err != nil {
 		print(err.Error())
 	}
-
 	// 4.初始化redis
 	err = db.InitRedis()
 	if err != nil {
@@ -43,4 +45,13 @@ func main() {
 	r := routers.InitApiRouter(false)
 	r.Run(":" + conf.Env.GetString("port"))
 
+}
+
+// 关闭所有的连接资源
+func resourceCloser() {
+	for _, resourceclose := range db.ResourceCloses {
+		if err := resourceclose(); err != nil {
+			log.ErrorLogger.Info("资源关闭异常", zap.Error(err))
+		}
+	}
 }

@@ -1,14 +1,15 @@
 package db
 
 import (
+	"quick-go/conf"
+	"quick-go/log"
+	"quick-go/utils"
+
 	"github.com/Shopify/sarama"
 	"github.com/go-redis/redis"
 	"go.uber.org/zap"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"quick-go/conf"
-	"quick-go/log"
-	"quick-go/utils"
 )
 
 var (
@@ -21,6 +22,8 @@ var (
 	// kafka连接
 	KafkaProLocal sarama.AsyncProducer
 	KafkaConLocal sarama.Consumer
+	// 连接资源关闭
+	ResourceCloses []func() error
 )
 
 func InitMysql() (err error) {
@@ -29,7 +32,6 @@ func InitMysql() (err error) {
 	if err != nil {
 		return err
 	}
-
 	return nil
 }
 
@@ -38,7 +40,6 @@ func InitKafka() (err error) {
 	if err != nil {
 		return err
 	}
-
 	return nil
 }
 
@@ -74,6 +75,10 @@ func kafkaConnect(addr string) (sarama.AsyncProducer, sarama.Consumer, error) {
 		log.ErrorLogger.Info("", zap.Error(err), zap.Any("KafkaClient", KafkaClient))
 		return nil, nil, err
 	}
+	// 资源关闭连接
+	ResourceCloses = append(ResourceCloses, KafkaConsumer.Close)
+	ResourceCloses = append(ResourceCloses, KafkaProLocal.Close)
+
 	return KafkaProducer, KafkaConsumer, nil
 }
 
@@ -91,19 +96,28 @@ func redisConnect(key string) (rdb *redis.Client, err error) {
 			zap.String("addr", addr))
 		return nil, err
 	}
+
+	ResourceCloses = append(ResourceCloses, rdb.Close)
 	return rdb, nil
 }
 
-func mysqlConnect(dbName string, key string) (db *gorm.DB, err error) {
+func mysqlConnect(dbName string, key string) (connect *gorm.DB, err error) {
 	username := conf.Env.GetString(key + ".user")
 	pw := conf.Env.GetString(key + ".pwd")
 	host := conf.Env.GetString(key + ".host")
 	port := conf.Env.GetString(key + ".port")
 	dsn := utils.StringConcat("", username, ":", pw, "@tcp(", host, ":", port, ")/", dbName, "?timeout=5s&readTimeout=5s&writeTimeout=1s&parseTime=true&loc=Local&charset=utf8mb4,utf8")
-	db, err = gorm.Open(mysql.Open(dsn))
+	connect, err = gorm.Open(mysql.Open(dsn))
 	if err != nil {
 		log.ErrorLogger.Info("", zap.Error(err), zap.String("connect info", dsn))
 		return nil, err
 	}
-	return db, nil
+	db, err := connect.DB()
+	if err != nil {
+		log.ErrorLogger.Info("", zap.Error(err))
+		return nil, err
+	}
+	// 加入到关闭队列
+	ResourceCloses = append(ResourceCloses, db.Close)
+	return
 }
