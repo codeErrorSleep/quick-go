@@ -65,16 +65,16 @@ type Spu struct {
 	WxGoodsCategoryID   string    `gorm:"column:wx_goods_category_id;type:varchar(64);not null;default:''" json:"wx_goods_category_id"`                 // 微信商品分类id
 }
 
-func (spu *Spu) TableName(appId string) string {
-	num := appId[len(appId)-1 : len(appId)]
+func (spu *Spu) TableName(appID string) string {
+	num := appID[len(appID)-1 : len(appID)]
 	return "t_spu_" + num
 }
 
-func (spu *Spu) GetSpuDetail(appId string, spuId string) (spuDetail Spu, err error) {
+func (spu *Spu) GetSpuDetail(appID string, spuID string) (spuDetail Spu, err error) {
 	query := db.LocalMysql.
-		Table(spu.TableName(appId)).
-		Where("app_id = ?", appId).
-		Where("spu_id = ?", spuId).
+		Table(spu.TableName(appID)).
+		Where("app_id = ?", appID).
+		Where("spu_id = ?", spuID).
 		Where("is_deleted = ?", 0)
 
 	err = query.First(&spuDetail).Error

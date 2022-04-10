@@ -2,11 +2,11 @@ package models
 
 // 商品sku表
 type Sku struct {
-	Id                uint64 `gorm:"column:id" db:"id" json:"id" form:"id"`
-	SkuId             string `gorm:"column:sku_id" db:"sku_id" json:"sku_id" form:"sku_id"`                                                     //SKU_ID
-	SkuBusinessId     string `gorm:"column:sku_business_id" db:"sku_business_id" json:"sku_business_id" form:"sku_business_id"`                 //资源侧的sku id
-	AppId             string `gorm:"column:app_id" db:"app_id" json:"app_id" form:"app_id"`                                                     //店铺id
-	SpuId             string `gorm:"column:spu_id" db:"spu_id" json:"spu_id" form:"spu_id"`                                                     //商品id
+	ID                uint64 `gorm:"column:id" db:"id" json:"id" form:"id"`
+	SkuID             string `gorm:"column:sku_id" db:"sku_id" json:"sku_id" form:"sku_id"`                                                     //SKU_ID
+	SkuBusinessID     string `gorm:"column:sku_business_id" db:"sku_business_id" json:"sku_business_id" form:"sku_business_id"`                 //资源侧的sku id
+	AppID             string `gorm:"column:app_id" db:"app_id" json:"app_id" form:"app_id"`                                                     //店铺id
+	SpuID             string `gorm:"column:spu_id" db:"spu_id" json:"spu_id" form:"spu_id"`                                                     //商品id
 	SkuImg            string `gorm:"column:sku_img" db:"sku_img" json:"sku_img" form:"sku_img"`                                                 //sku默认图片
 	SkuName           string `gorm:"column:sku_name" db:"sku_name" json:"sku_name" form:"sku_name"`                                             //sku名字
 	SkuDesc           string `gorm:"column:sku_desc" db:"sku_desc" json:"sku_desc" form:"sku_desc"`                                             //规格描述

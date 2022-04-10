@@ -18,14 +18,14 @@ func StockServiceNew(ctx *gin.Context) *StockService {
 }
 
 // getSpuStock 获取商品的信息
-func (s *StockService) GetSpuStock(req *entity.GetSpuStock) error {
-	appId := req.AppId
-	spuId := req.SpuId
-	stockRedisKey := appId + ":" + spuId
+func (s *StockService) GetSpuStock(req *entity.GetSpuStockReq) (resData entity.GetSpuStockRes, err error) {
+	appID := req.AppID
+	spuID := req.SpuID
+	stockRedisKey := appID + ":" + spuID
 	// 查redis
 	stockRedisDetail := db.RedisLocal.HGetAll(stockRedisKey)
 	if stockRedisDetail.Err() != nil {
-		return stockRedisDetail.Err()
+		return resData, stockRedisDetail.Err()
 	}
 	if stockRedisDetail.Val() != nil {
 		fmt.Println(stockRedisDetail.Val())
@@ -33,9 +33,9 @@ func (s *StockService) GetSpuStock(req *entity.GetSpuStock) error {
 
 	// 获取stock的信息
 	stock := models.Stock{}
-	stockList, err := stock.GetStockDetail(appId, spuId)
+	stockList, err := stock.GetStockDetail(appID, spuID)
 	if err != nil {
-		return err
+		return resData, err
 	}
 
 	// 存到redis
@@ -43,11 +43,23 @@ func (s *StockService) GetSpuStock(req *entity.GetSpuStock) error {
 	for i := 0; i < len(stockList); i++ {
 		stockRedisMap[stockList[i].SkuID] = stockList[i].LeftNum
 	}
-
 	statusCmd := db.RedisLocal.HMSet(stockRedisKey, stockRedisMap)
 	if statusCmd.Err() != nil {
-		return stockRedisDetail.Err()
+		return resData, stockRedisDetail.Err()
 	}
 
-	return nil
+	// 组装返回参数
+	resData = entity.GetSpuStockRes{
+		AppID: appID,
+		SpuID: spuID,
+	}
+	for _, stockInfo := range stockList {
+		resData.SkuInfo = append(resData.SkuInfo, entity.SkuInfoRes{
+			SkuID:   stockInfo.SkuID,
+			SellNum: stockInfo.SellNum,
+			LeftNum: stockInfo.LeftNum,
+		})
+	}
+
+	return resData, nil
 }

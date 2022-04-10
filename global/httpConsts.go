@@ -11,19 +11,18 @@ const (
 	ValidatorParamsCheckFailMsg  string = "参数校验失败"
 
 	// CURD 常用业务状态码
-	CurdStatusOkCode      int    = 0
-	CurdStatusOkMsg       string = "Success"
-	CurdCreatFailCode     int    = -400200
-	CurdCreatFailMsg      string = "新增失败"
-	CurdUpdateFailCode    int    = -400201
-	CurdUpdateFailMsg     string = "更新失败"
-	CurdDeleteFailCode    int    = -400202
-	CurdDeleteFailMsg     string = "删除失败"
-	CurdSelectFailCode    int    = -400203
-	CurdSelectFailMsg     string = "查询无数据"
-	CurdRegisterFailCode  int    = -400204
-	CurdSelectErrorMsg    string = "查询失败"
-	CurdRegisterErrorCode int    = -400205
+	CurdStatusOkCode    int    = 0
+	CurdStatusOkMsg     string = "Success"
+	CurdCreatFailCode   int    = -400200
+	CurdCreatFailMsg    string = "新增失败"
+	CurdUpdateFailCode  int    = -400201
+	CurdUpdateFailMsg   string = "更新失败"
+	CurdDeleteFailCode  int    = -400202
+	CurdDeleteFailMsg   string = "删除失败"
+	CurdSelectFailCode  int    = -400203
+	CurdSelectFailMsg   string = "查询无数据"
+	CurdSelectErrorCode int    = -400206
+	CurdSelectErrorMsg  string = "查询失败"
 
 	// 请求业务
 	CallOtherServerErr int64 = -400206
