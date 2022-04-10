@@ -8,6 +8,8 @@ gin+gorm
 # todo
 - sw...接口文档
 - dockerfile支持
+- grpc
+- 本地缓存
 
 
 # done

@@ -26,8 +26,8 @@ func ReturnJsonFromString(Context *gin.Context, httpCode int, jsonStr string) {
 // 语法糖函数封装
 
 // Success 直接返回成功
-func Success(c *gin.Context, msg string, data interface{}) {
-	ReturnJson(c, http.StatusOK, consts.CurdStatusOkCode, msg, data)
+func Success(c *gin.Context, data interface{}) {
+	ReturnJson(c, http.StatusOK, consts.CurdStatusOkCode, "success", data)
 }
 
 // Fail 失败的业务逻辑
