@@ -1,11 +1,12 @@
 package service
 
 import (
-	"fmt"
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"quick-go/app/entity"
 	"quick-go/db"
 	"quick-go/db/models"
+	"time"
 )
 
 type StockService struct {
@@ -21,14 +22,16 @@ func StockServiceNew(ctx *gin.Context) *StockService {
 func (s *StockService) GetSpuStock(req *entity.GetSpuStockReq) (resData entity.GetSpuStockRes, err error) {
 	appID := req.AppID
 	spuID := req.SpuID
-	stockRedisKey := appID + ":" + spuID
+	stockRedisKey := "stock-" + appID + ":" + spuID
 	// 查redis
-	stockRedisDetail := db.RedisLocal.HGetAll(stockRedisKey)
-	if stockRedisDetail.Err() != nil {
-		return resData, stockRedisDetail.Err()
-	}
-	if stockRedisDetail.Val() != nil {
-		fmt.Println(stockRedisDetail.Val())
+	stockRedisDetail := db.RedisLocal.Get(stockRedisKey)
+	if stockRedisDetail.Val() != "" {
+		stockRedisByte, _ := stockRedisDetail.Bytes()
+		err = json.Unmarshal(stockRedisByte, &resData)
+		if err != nil {
+			return resData, err
+		}
+		return resData, nil
 	}
 
 	// 获取stock的信息
@@ -36,16 +39,6 @@ func (s *StockService) GetSpuStock(req *entity.GetSpuStockReq) (resData entity.G
 	stockList, err := stock.GetStockDetail(appID, spuID)
 	if err != nil {
 		return resData, err
-	}
-
-	// 存到redis
-	stockRedisMap := make(map[string]interface{})
-	for i := 0; i < len(stockList); i++ {
-		stockRedisMap[stockList[i].SkuID] = stockList[i].LeftNum
-	}
-	statusCmd := db.RedisLocal.HMSet(stockRedisKey, stockRedisMap)
-	if statusCmd.Err() != nil {
-		return resData, stockRedisDetail.Err()
 	}
 
 	// 组装返回参数
@@ -60,6 +53,13 @@ func (s *StockService) GetSpuStock(req *entity.GetSpuStockReq) (resData entity.G
 			LeftNum: stockInfo.LeftNum,
 		})
 	}
+
+	// 设置redis
+	stockStr, err := json.Marshal(resData)
+	if err != nil {
+		return resData, err
+	}
+	db.RedisLocal.Set(stockRedisKey, stockStr, time.Second*60)
 
 	return resData, nil
 }

@@ -27,6 +27,7 @@ func GetSpuStock(c *gin.Context) {
 	resData, err := svc.GetSpuStock(&req)
 	if err != nil {
 		response.Fail(c, consts.CurdSelectErrorCode, consts.CurdSelectErrorMsg, err)
+		return
 	}
 	response.Success(c, resData)
 }
