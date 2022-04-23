@@ -1,10 +1,11 @@
 package log
 
 import (
+	conf2 "quick-go/conf"
+
 	"github.com/natefinch/lumberjack"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	conf2 "quick-go/conf"
 )
 
 var (
@@ -63,7 +64,6 @@ func initLogger(logPath string, loglevel string) *zap.Logger {
 	)
 
 	logger := zap.New(core, zap.AddCaller())
-	logger.Info(logPath + "初始化成功")
 
 	return logger
 }
