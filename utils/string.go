@@ -15,3 +15,7 @@ func Str2MD5(s string) string {
 func StringConcat(sep string, strs ...string) string {
 	return strings.Join(strs, sep)
 }
+
+func LiteralToMD5[T string | []byte](s T) string {
+	return fmt.Sprintf("%x", md5.Sum([]byte(s)))
+}
