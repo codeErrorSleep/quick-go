@@ -10,7 +10,8 @@ gin+gorm
 - grpc
 - 本地缓存
 - -go1.18升级
-- 中间件缓存
+- repo层
+- errors.new
 
 
 # done
@@ -18,3 +19,4 @@ gin+gorm
 - kafka测试
 - gin合成
 - 中间件日志
+- 中间件缓存
