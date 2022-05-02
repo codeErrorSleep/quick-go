@@ -25,7 +25,7 @@ const (
 	CurdSelectErrorMsg  string = "查询失败"
 
 	// 请求业务
-	CallOtherServerErr int64 = -400206
+	CallOtherServerErr int = -400206
 	// 请求业务
 	UnknownErrorMsg = "未知错误"
 )
