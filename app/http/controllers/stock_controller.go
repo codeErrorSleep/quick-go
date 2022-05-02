@@ -25,9 +25,6 @@ func GetSpuStock(c *gin.Context) {
 	// 调用service
 	svc := service.StockServiceNew(c)
 	resData, err := svc.GetSpuStock(&req)
-	if err != nil {
-		response.Fail(c, consts.CurdSelectErrorCode, consts.CurdSelectErrorMsg, err)
-		return
-	}
-	response.Success(c, resData)
+
+	response.Respond(c, resData, err)
 }

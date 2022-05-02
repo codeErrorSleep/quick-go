@@ -3,6 +3,7 @@ package response
 import (
 	"net/http"
 	consts "quick-go/global"
+	"quick-go/utils/errors"
 
 	"github.com/gin-gonic/gin"
 )
@@ -40,4 +41,14 @@ func Fail(c *gin.Context, dataCode int, msg string, data interface{}) {
 func ErrorParam(c *gin.Context, wrongParam interface{}) {
 	ReturnJson(c, http.StatusBadRequest, consts.ValidatorParamsCheckFailCode, consts.ValidatorParamsCheckFailMsg, wrongParam)
 	c.Abort()
+}
+
+func Respond(c *gin.Context, data interface{}, err error) {
+	if err == nil {
+		Success(c, data)
+		return
+	}
+
+	e := errors.FromError(err)
+	Fail(c, e.Code, e.Message, e.Metadata)
 }

@@ -1,12 +1,12 @@
 package service
 
 import (
-	"encoding/json"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"quick-go/app/entity"
-	"quick-go/db"
 	"quick-go/db/models"
-	"time"
+	consts "quick-go/global"
+	"quick-go/utils/errors"
 )
 
 type StockService struct {
@@ -19,30 +19,19 @@ func StockServiceNew(ctx *gin.Context) *StockService {
 }
 
 // getSpuStock 获取商品的信息
-func (s *StockService) GetSpuStock(req *entity.GetSpuStockReq) (resData entity.GetSpuStockRes, err error) {
+func (s *StockService) GetSpuStock(req *entity.GetSpuStockReq) (resData *entity.GetSpuStockRes, err error) {
 	appID := req.AppID
 	spuID := req.SpuID
-	stockRedisKey := "stock-" + appID + ":" + spuID
-	// 查redis
-	stockRedisDetail := db.RedisLocal.Get(stockRedisKey)
-	if stockRedisDetail.Val() != "" {
-		stockRedisByte, _ := stockRedisDetail.Bytes()
-		err = json.Unmarshal(stockRedisByte, &resData)
-		if err != nil {
-			return resData, err
-		}
-		return resData, nil
-	}
 
 	// 获取stock的信息
 	stock := models.Stock{}
 	stockList, err := stock.GetStockDetail(appID, spuID)
 	if err != nil {
-		return resData, err
+		return nil, errors.New(consts.CurdSelectFailCode, fmt.Sprint(req.AppID, req.SpuID), consts.CurdSelectFailMsg)
 	}
 
 	// 组装返回参数
-	resData = entity.GetSpuStockRes{
+	resData = &entity.GetSpuStockRes{
 		AppID: appID,
 		SpuID: spuID,
 	}
@@ -53,13 +42,6 @@ func (s *StockService) GetSpuStock(req *entity.GetSpuStockReq) (resData entity.G
 			LeftNum: stockInfo.LeftNum,
 		})
 	}
-
-	// 设置redis
-	stockStr, err := json.Marshal(resData)
-	if err != nil {
-		return resData, err
-	}
-	db.RedisLocal.Set(stockRedisKey, stockStr, time.Second*60)
 
 	return resData, nil
 }
