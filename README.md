@@ -20,3 +20,10 @@ gin+gorm
 - gin合成
 - 中间件日志
 - 中间件缓存
+
+
+
+# 模块
+web gin
+db gorm,go-redis
+log zap
