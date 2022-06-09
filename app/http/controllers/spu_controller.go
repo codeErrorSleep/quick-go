@@ -1,10 +1,11 @@
 package controllers
 
 import (
-	"github.com/gin-gonic/gin"
 	"quick-go/app/entity"
-	consts "quick-go/global"
+	"quick-go/global/consts"
 	"quick-go/utils/response"
+
+	"github.com/gin-gonic/gin"
 )
 
 // GetSpuInfo 获取商品信息

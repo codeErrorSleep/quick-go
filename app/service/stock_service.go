@@ -2,11 +2,12 @@ package service
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"quick-go/app/entity"
-	"quick-go/db/models"
-	consts "quick-go/global"
+	"quick-go/app/models"
+	"quick-go/global/consts"
 	"quick-go/utils/errors"
+
+	"github.com/gin-gonic/gin"
 )
 
 type StockService struct {
