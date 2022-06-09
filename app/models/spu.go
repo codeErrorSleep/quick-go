@@ -1,7 +1,7 @@
 package models
 
 import (
-	"quick-go/db"
+	"quick-go/global"
 	"time"
 )
 
@@ -66,12 +66,12 @@ type Spu struct {
 }
 
 func (spu *Spu) TableName(appID string) string {
-	num := appID[len(appID)-1 : len(appID)]
+	num := appID[len(appID)-1:]
 	return "t_spu_" + num
 }
 
 func (spu *Spu) GetSpuDetail(appID string, spuID string) (spuDetail Spu, err error) {
-	query := db.LocalMysql.
+	query := global.LocalMysql.
 		Table(spu.TableName(appID)).
 		Where("app_id = ?", appID).
 		Where("spu_id = ?", spuID).

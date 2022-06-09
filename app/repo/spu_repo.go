@@ -3,6 +3,7 @@ package repo
 import (
 	"context"
 	"quick-go/app/models"
+	"quick-go/global"
 
 	"gorm.io/gorm"
 )
@@ -11,8 +12,8 @@ type mysqlSpuRepository struct {
 	DB *gorm.DB
 }
 
-func NewMysqlSpuRepository(DB *gorm.DB) ISpuRepo {
-	return &mysqlSpuRepository{DB}
+func NewMysqlSpuRepository() ISpuRepo {
+	return &mysqlSpuRepository{global.LocalMysql}
 }
 
 func (m *mysqlSpuRepository) GetSpuDetail(ctx context.Context, appID string, spuID string) (spuDetail models.Spu, err error) {

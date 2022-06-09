@@ -3,7 +3,7 @@ package repo
 import (
 	"context"
 	"quick-go/app/models"
-	"quick-go/db"
+	"quick-go/global"
 
 	"gorm.io/gorm"
 )
@@ -12,12 +12,12 @@ type mysqlStockRepository struct {
 	DB *gorm.DB
 }
 
-func NewMysqlStockRepository(DB *gorm.DB) IStockRepo {
-	return &mysqlStockRepository{DB}
+func NewMysqlStockRepository() IStockRepo {
+	return &mysqlStockRepository{global.LocalMysql}
 }
 
 func (m *mysqlStockRepository) GetStockDetail(ctx context.Context, appID string, spuID string) (stockList []models.Stock, err error) {
-	query := db.LocalMysql.
+	query := global.LocalMysql.
 		Table((&models.Stock{}).TableName(appID)).
 		Where("app_id = ?", appID).
 		Where("spu_id = ?", spuID).

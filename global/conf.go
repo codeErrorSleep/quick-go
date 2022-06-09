@@ -1,9 +1,10 @@
-package conf
+package global
 
 import (
 	"flag"
-	"github.com/spf13/viper"
 	"log"
+
+	"github.com/spf13/viper"
 )
 
 var (

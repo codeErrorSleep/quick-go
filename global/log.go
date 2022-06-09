@@ -1,8 +1,6 @@
-package log
+package global
 
 import (
-	conf2 "quick-go/conf"
-
 	"github.com/natefinch/lumberjack"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -29,7 +27,7 @@ func InitLog() error {
 // loglevel 日志级别
 func initLogger(logPath string, loglevel string) *zap.Logger {
 	// 加上要记录的路径
-	logPath = conf2.Env.GetString("logPath") + logPath
+	logPath = Env.GetString("logPath") + logPath
 	lumberHook := lumberjack.Logger{
 		Filename:   logPath, // 日志文件路径
 		MaxSize:    128,     // megabytes
