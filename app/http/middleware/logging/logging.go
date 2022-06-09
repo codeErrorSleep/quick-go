@@ -2,12 +2,13 @@ package logging
 
 import (
 	"bytes"
-	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 	"io/ioutil"
-	"quick-go/log"
+	"quick-go/global"
 	"strings"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 /// LoggingWriter ...
@@ -54,7 +55,7 @@ func Logging() gin.HandlerFunc {
 			zap.Float64("latency", time.Since(st).Seconds()),
 		)
 
-		log.RequestLogger.Info("Middleware logging", logFields...)
+		global.RequestLogger.Info("Middleware logging", logFields...)
 
 	}
 }

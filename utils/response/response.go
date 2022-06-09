@@ -2,7 +2,7 @@ package response
 
 import (
 	"net/http"
-	consts "quick-go/global"
+	"quick-go/global/consts"
 	"quick-go/utils/errors"
 
 	"github.com/gin-gonic/gin"

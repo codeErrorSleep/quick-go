@@ -1,6 +1,6 @@
 package models
 
-import "quick-go/db"
+import "quick-go/global"
 
 type Stock struct {
 	ID         int64  `json:"id"`
@@ -19,12 +19,12 @@ type Stock struct {
 }
 
 func (stock *Stock) TableName(appID string) string {
-	num := appID[len(appID)-1 : len(appID)]
+	num := appID[len(appID)-1:]
 	return "t_stock_" + num
 }
 
 func (stock *Stock) GetStockDetail(appID string, spuID string) (stockList []Stock, err error) {
-	query := db.LocalMysql.
+	query := global.LocalMysql.
 		Table(stock.TableName(appID)).
 		Where("app_id = ?", appID).
 		Where("spu_id = ?", spuID).

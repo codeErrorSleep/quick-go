@@ -1,11 +1,12 @@
 package controllers
 
 import (
-	"github.com/gin-gonic/gin"
 	"quick-go/app/entity"
 	"quick-go/app/service"
-	consts "quick-go/global"
+	"quick-go/global/consts"
 	"quick-go/utils/response"
+
+	"github.com/gin-gonic/gin"
 )
 
 // ReduceStock 删减库存

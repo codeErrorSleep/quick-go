@@ -7,8 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"quick-go/app/entity"
-	"quick-go/db"
-	"quick-go/log"
+	"quick-go/global"
 	"quick-go/utils"
 	"strings"
 	"time"
@@ -50,7 +49,7 @@ func SetRedisCache(expireTime time.Duration) gin.HandlerFunc {
 		cacheKeyMd5 := requestUrl + string(requestBody)
 		cachekey := "quick_middleware_" + utils.LiteralToMD5(cacheKeyMd5)
 		fmt.Print(cachekey)
-		cacheValue := db.RedisLocal.Get(cachekey)
+		cacheValue := global.RedisLocal.Get(cachekey)
 		if cacheValue.Val() != "" {
 			ret := entity.DefaultRequest{}
 			_ = json.Unmarshal([]byte(cacheValue.Val()), &ret)
@@ -68,8 +67,8 @@ func SetRedisCache(expireTime time.Duration) gin.HandlerFunc {
 
 		// 只缓存成功的
 		if !c.IsAborted() && w.Status() < 300 && w.Status() >= 200 {
-			if err := db.RedisLocal.Set(cachekey, w.body.String(), time.Second*expireTime); err != nil {
-				log.ErrorLogger.Info("cache middleware failed	", zap.Error(err.Err()))
+			if err := global.RedisLocal.Set(cachekey, w.body.String(), time.Second*expireTime); err != nil {
+				global.ErrorLogger.Info("cache middleware failed	", zap.Error(err.Err()))
 			}
 		}
 	}

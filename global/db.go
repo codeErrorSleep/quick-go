@@ -1,8 +1,6 @@
-package db
+package global
 
 import (
-	"quick-go/conf"
-	"quick-go/log"
 	"quick-go/utils"
 
 	"github.com/Shopify/sarama"
@@ -57,22 +55,22 @@ func kafkaConnect(addr string) (sarama.AsyncProducer, sarama.Consumer, error) {
 	kafkaConf.Producer.Partitioner = sarama.NewRandomPartitioner
 
 	kafkaAddr := []string{
-		conf.Env.GetString(addr + ".addr"), // Addr, in form of `Host:Port``
+		Env.GetString(addr + ".addr"), // Addr, in form of `Host:Port``
 	}
 	KafkaClient, err := sarama.NewClient(kafkaAddr, kafkaConf)
 	if err != nil {
-		log.ErrorLogger.Info("", zap.Error(err), zap.Any("kafkaAddr", kafkaAddr), zap.Any("kafkaConf", kafkaConf))
+		ErrorLogger.Info("", zap.Error(err), zap.Any("kafkaAddr", kafkaAddr), zap.Any("kafkaConf", kafkaConf))
 		return nil, nil, err
 	}
 	// 生成 Kafka 生产者、消费者
 	KafkaProducer, err := sarama.NewAsyncProducerFromClient(KafkaClient)
 	if err != nil {
-		log.ErrorLogger.Info("", zap.Error(err), zap.Any("KafkaClient", KafkaClient))
+		ErrorLogger.Info("", zap.Error(err), zap.Any("KafkaClient", KafkaClient))
 		return nil, nil, err
 	}
 	KafkaConsumer, err := sarama.NewConsumerFromClient(KafkaClient)
 	if err != nil {
-		log.ErrorLogger.Info("", zap.Error(err), zap.Any("KafkaClient", KafkaClient))
+		ErrorLogger.Info("", zap.Error(err), zap.Any("KafkaClient", KafkaClient))
 		return nil, nil, err
 	}
 	// 资源关闭连接
@@ -84,15 +82,15 @@ func kafkaConnect(addr string) (sarama.AsyncProducer, sarama.Consumer, error) {
 
 // 初始化连接
 func redisConnect(key string) (rdb *redis.Client, err error) {
-	addr := conf.Env.GetString(key+".host") + ":" + conf.Env.GetString(key+".port")
+	addr := Env.GetString(key+".host") + ":" + Env.GetString(key+".port")
 	rdb = redis.NewClient(&redis.Options{
 		Addr:     addr,
-		Password: conf.Env.GetString(key + ".password"),
+		Password: Env.GetString(key + ".password"),
 		DB:       0,
 	})
 	_, err = rdb.Ping().Result()
 	if err != nil {
-		log.ErrorLogger.Error("redis连接异常", zap.Error(err), zap.String("connectInfo", key),
+		ErrorLogger.Error("redis连接异常", zap.Error(err), zap.String("connectInfo", key),
 			zap.String("addr", addr))
 		return nil, err
 	}
@@ -102,19 +100,19 @@ func redisConnect(key string) (rdb *redis.Client, err error) {
 }
 
 func mysqlConnect(dbName string, key string) (connect *gorm.DB, err error) {
-	username := conf.Env.GetString(key + ".user")
-	pw := conf.Env.GetString(key + ".pwd")
-	host := conf.Env.GetString(key + ".host")
-	port := conf.Env.GetString(key + ".port")
+	username := Env.GetString(key + ".user")
+	pw := Env.GetString(key + ".pwd")
+	host := Env.GetString(key + ".host")
+	port := Env.GetString(key + ".port")
 	dsn := utils.StringConcat("", username, ":", pw, "@tcp(", host, ":", port, ")/", dbName, "?timeout=5s&readTimeout=5s&writeTimeout=1s&parseTime=true&loc=Local&charset=utf8mb4,utf8")
 	connect, err = gorm.Open(mysql.Open(dsn))
 	if err != nil {
-		log.ErrorLogger.Info("", zap.Error(err), zap.String("connect info", dsn))
+		ErrorLogger.Info("", zap.Error(err), zap.String("connect info", dsn))
 		return nil, err
 	}
 	db, err := connect.DB()
 	if err != nil {
-		log.ErrorLogger.Info("", zap.Error(err))
+		ErrorLogger.Info("", zap.Error(err))
 		return nil, err
 	}
 	// 加入到关闭队列
