@@ -3,7 +3,7 @@ package response
 import (
 	"net/http"
 	"quick-go/global/consts"
-	"quick-go/utils/errors"
+	"quick-go/utils/quickErrors"
 
 	"github.com/gin-gonic/gin"
 )
@@ -48,7 +48,6 @@ func Respond(c *gin.Context, data interface{}, err error) {
 		Success(c, data)
 		return
 	}
-
-	e := errors.FromError(err)
+	e := quickErrors.FromError(err)
 	Fail(c, e.Code, e.Message, e.Metadata)
 }

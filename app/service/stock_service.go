@@ -5,7 +5,7 @@ import (
 	"quick-go/app/entity"
 	"quick-go/app/models"
 	"quick-go/global/consts"
-	"quick-go/utils/errors"
+	"quick-go/utils/quickErrors"
 
 	"github.com/gin-gonic/gin"
 )
@@ -28,7 +28,7 @@ func (s *StockService) GetSpuStock(req *entity.GetSpuStockReq) (resData *entity.
 	stock := models.Stock{}
 	stockList, err := stock.GetStockDetail(appID, spuID)
 	if err != nil {
-		return nil, errors.New(consts.CurdSelectFailCode, fmt.Sprint(req.AppID, req.SpuID), consts.CurdSelectFailMsg)
+		return nil, quickErrors.New(consts.CurdSelectFailCode, fmt.Sprint(req.AppID, req.SpuID), consts.CurdSelectFailMsg)
 	}
 
 	// 组装返回参数
