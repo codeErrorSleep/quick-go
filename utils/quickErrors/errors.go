@@ -1,4 +1,4 @@
-package errors
+package quickErrors
 
 import (
 	"errors"
