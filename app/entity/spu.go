@@ -14,4 +14,5 @@ type GetSpuInfoRes struct {
 	ResourceType int    `json:"resource_type"`
 	GoodsName    string `json:"goods_name"`
 	GoodsImg     string `json:"goods_img"`
+	SaleAt       int64  `json:"sale_at"`
 }

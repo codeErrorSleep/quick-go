@@ -1,3 +1,4 @@
 .idea/
 ./storage/logs/
 storage/logs/
+__debug_bin.exe

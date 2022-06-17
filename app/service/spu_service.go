@@ -5,6 +5,7 @@ import (
 	"quick-go/app/repo"
 	"quick-go/global/consts"
 	"quick-go/utils/quickErrors"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -41,4 +42,13 @@ func (s *SpuService) GetSpuInfo(req *entity.GetSpuInfoReq) (res *entity.GetSpuIn
 		GoodsImg:     spuInfo.GoodsImg,
 	}
 	return res, nil
+}
+
+// getSpuSaleTimeStamp 获取商品的销售时间戳
+func getSpuSaleTimeStamp(saleAtString string) (saleAtStamp int64, err error) {
+	saleAt, err := time.Parse("2006-01-02 15:04:05", saleAtString)
+	if err != nil {
+		return 0, err
+	}
+	return saleAt.Unix(), nil
 }
