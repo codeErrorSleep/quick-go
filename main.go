@@ -34,10 +34,10 @@ func main() {
 	}
 
 	// 5.创建kafka连接
-	//err = db.InitKafka()
-	//if err != nil {
-	//	print(err.Error())
-	//}
+	err = global.InitKafka()
+	if err != nil {
+		print(err.Error())
+	}
 
 	// 6.注册路由
 	r := routers.InitApiRouter(false)

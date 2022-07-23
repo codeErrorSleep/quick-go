@@ -34,7 +34,7 @@ func InitMysql() (err error) {
 }
 
 func InitKafka() (err error) {
-	KafkaProLocal, KafkaConLocal, err = kafkaConnect("localKafka")
+	KafkaProLocal, KafkaConLocal, err = kafkaConnect("localhost:9092")
 	if err != nil {
 		return err
 	}
@@ -55,7 +55,8 @@ func kafkaConnect(addr string) (sarama.AsyncProducer, sarama.Consumer, error) {
 	kafkaConf.Producer.Partitioner = sarama.NewRandomPartitioner
 
 	kafkaAddr := []string{
-		Env.GetString(addr + ".addr"), // Addr, in form of `Host:Port``
+		// Env.GetString(addr + ".addr"), // Addr, in form of `Host:Port``
+		addr,
 	}
 	KafkaClient, err := sarama.NewClient(kafkaAddr, kafkaConf)
 	if err != nil {
@@ -74,8 +75,8 @@ func kafkaConnect(addr string) (sarama.AsyncProducer, sarama.Consumer, error) {
 		return nil, nil, err
 	}
 	// 资源关闭连接
-	ResourceCloses = append(ResourceCloses, KafkaConsumer.Close)
-	ResourceCloses = append(ResourceCloses, KafkaProLocal.Close)
+	// ResourceCloses = append(ResourceCloses, KafkaConsumer.Close)
+	// ResourceCloses = append(ResourceCloses, KafkaProLocal.Close)
 
 	return KafkaProducer, KafkaConsumer, nil
 }

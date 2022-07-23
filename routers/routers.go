@@ -3,7 +3,6 @@ package routers
 import (
 	"net/http"
 	"quick-go/app/http/controllers"
-	"quick-go/app/http/middleware/cache_middleware"
 	cors2 "quick-go/app/http/middleware/cors"
 	logging2 "quick-go/app/http/middleware/logging"
 
@@ -28,7 +27,8 @@ func InitApiRouter(test bool) *gin.Engine {
 	stockAPI := router.Group("/stock/")
 	{
 		stockAPI.POST("/reduce_stock", controllers.ReduceStock)
-		stockAPI.POST("/get_spu_stock", cache_middleware.SetRedisCache(100), controllers.GetSpuStock)
+		stockAPI.POST("/get_spu_stock", controllers.GetSpuStock)
+		// stockAPI.POST("/get_spu_stock", cache_middleware.SetRedisCache(100), controllers.GetSpuStock)
 	}
 
 	spuAPI := router.Group("/spu/")
