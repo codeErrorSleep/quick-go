@@ -12,7 +12,10 @@ type mysqlSpuRepository struct {
 	DB *gorm.DB
 }
 
-func NewMysqlSpuRepository() ISpuRepo {
+func NewMysqlSpuRepository(db *gorm.DB) ISpuRepo {
+	if db != nil {
+		return &mysqlSpuRepository{db}
+	}
 	return &mysqlSpuRepository{global.LocalMysql}
 }
 

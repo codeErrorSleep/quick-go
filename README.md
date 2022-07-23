@@ -9,10 +9,7 @@ gin+gorm
 - dockerfile支持
 - grpc
 - 本地缓存
-- -go1.18升级
-- repo层
-- errors.new
-
+- 加个简易库存模型
 
 # done
 - 开启的资源guanbi

@@ -1,12 +1,15 @@
 package service
 
 import (
+	"encoding/json"
 	"quick-go/app/entity"
 	"quick-go/app/repo"
+	"quick-go/global"
 	"quick-go/global/consts"
 	"quick-go/utils/quickErrors"
 	"time"
 
+	"github.com/Shopify/sarama"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,7 +19,7 @@ type SpuService struct {
 }
 
 func SpuServiceNew(ctx *gin.Context) *SpuService {
-	svc := SpuService{ctx: ctx, SpuRepo: repo.NewMysqlSpuRepository()}
+	svc := SpuService{ctx: ctx, SpuRepo: repo.NewMysqlSpuRepository(nil)}
 	return &svc
 }
 
@@ -41,6 +44,14 @@ func (s *SpuService) GetSpuInfo(req *entity.GetSpuInfoReq) (res *entity.GetSpuIn
 		GoodsName:    spuInfo.GoodsName,
 		GoodsImg:     spuInfo.GoodsImg,
 	}
+
+	resDataStr, _ := json.Marshal(res)
+	global.KafkaProLocal.Input() <- &sarama.ProducerMessage{
+		Topic: "revolution",
+		Key:   sarama.ByteEncoder("spu_datas"),
+		Value: sarama.ByteEncoder(resDataStr),
+	}
+
 	return res, nil
 }
 
