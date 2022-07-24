@@ -37,5 +37,10 @@ func InitApiRouter(test bool) *gin.Engine {
 
 	}
 
+	kafkaAPI := router.Group("/kafka/")
+	{
+		kafkaAPI.POST("createdManyMessages", controllers.CreateManyMessages)
+	}
+
 	return router
 }
