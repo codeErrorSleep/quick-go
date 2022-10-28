@@ -23,3 +23,17 @@ func GetSpuInfo(c *gin.Context) {
 	data, err := svc.GetSpuInfo(&req)
 	response.Respond(c, data, err)
 }
+
+func AsyncRedisList(c *gin.Context) {
+	// 参数校验
+	req := entity.GetSpuInfoReq{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.Fail(c, consts.ValidatorParamsCheckFailCode, err.Error(), err)
+		return
+	}
+
+	// 调用service
+	svc := service.SpuServiceNew(c)
+	data, err := svc.AsyncRedisList(&req)
+	response.Respond(c, data, err)
+}

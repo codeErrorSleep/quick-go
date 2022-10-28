@@ -2,6 +2,7 @@ package service
 
 import (
 	"encoding/json"
+	"fmt"
 	"quick-go/app/entity"
 	"quick-go/app/repo"
 	"quick-go/global"
@@ -62,4 +63,16 @@ func getSpuSaleTimeStamp(saleAtString string) (saleAtStamp int64, err error) {
 		return 0, err
 	}
 	return saleAt.Unix(), nil
+}
+
+func (s *SpuService) AsyncRedisList(req *entity.GetSpuInfoReq) (res *entity.GetSpuInfoRes, err error) {
+	// 直接拿参数出来写到redis 队列上面
+	reqStr, _ := json.Marshal(req)
+
+	_, err = global.RedisLocal.LPush("goods_detail_list", reqStr).Result()
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	return res, nil
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"quick-go/app/async"
 	"quick-go/global"
 	"quick-go/routers"
 
@@ -27,6 +28,7 @@ func main() {
 	if err != nil {
 		print(err.Error())
 	}
+
 	// 4.初始化redis
 	err = global.InitRedis()
 	if err != nil {
@@ -38,6 +40,8 @@ func main() {
 	if err != nil {
 		print(err.Error())
 	}
+
+	go async.AsyncGoodsDetail()
 
 	// 6.注册路由
 	r := routers.InitApiRouter(false)

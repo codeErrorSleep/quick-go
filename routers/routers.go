@@ -42,5 +42,10 @@ func InitApiRouter(test bool) *gin.Engine {
 		kafkaAPI.POST("createdManyMessages", controllers.CreateManyMessages)
 	}
 
+	// AsyncAPI := router.Group("/async/")
+	// {
+	// 	AsyncAPI.POST("async_redis_list", controllers.AsyncRedisList)
+	// }
+
 	return router
 }
