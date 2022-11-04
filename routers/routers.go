@@ -34,7 +34,7 @@ func InitApiRouter(test bool) *gin.Engine {
 	spuAPI := router.Group("/spu/")
 	{
 		spuAPI.POST("/get_spu_info", controllers.GetSpuInfo)
-
+		spuAPI.POST("/create_test_val", controllers.CreateSpu)
 	}
 
 	kafkaAPI := router.Group("/kafka/")

@@ -1,11 +1,15 @@
 package main
 
 import (
-	"quick-go/app/async"
+	"fmt"
+	"net"
+	"quick-go/app/rpc"
+	"quick-go/app/service"
 	"quick-go/global"
 	"quick-go/routers"
 
 	"go.uber.org/zap"
+	"google.golang.org/grpc"
 )
 
 func main() {
@@ -35,17 +39,29 @@ func main() {
 		print(err.Error())
 	}
 
-	// 5.创建kafka连接
-	err = global.InitKafka()
-	if err != nil {
-		print(err.Error())
-	}
+	// // 5.创建kafka连接
+	// err = global.InitKafka()
+	// if err != nil {
+	// 	print(err.Error())
+	// }
 
-	go async.AsyncGoodsDetail()
+	// // 异步处理请求
+	// go async.AsyncGoodsDetail()
+
+	// rpc 服务
+	grpcServer := grpc.NewServer()
+	rpc.RegisterHelloServiceServer(grpcServer, &service.HelloService{})
+	listener, err := net.Listen("tcp", "localhost:"+global.Env.GetString("grpcPort"))
+	if err != nil {
+		fmt.Println("net Listen err: ", err)
+		return
+	}
+	grpcServer.Serve(listener)
+	defer listener.Close()
 
 	// 6.注册路由
 	r := routers.InitApiRouter(false)
-	r.Run(":" + global.Env.GetString("port"))
+	r.Run(":" + global.Env.GetString("httpPort"))
 
 }
 

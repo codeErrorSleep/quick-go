@@ -1,0 +1,26 @@
+// 指定 proto 的版本信息
+syntax = "proto3";
+
+// 指定生成的 go 文件存放位置及其包名
+option go_package = "/app/rpc";
+
+// 指定所在包的包名
+package rpc;
+
+// 定义请求消息体
+message GetBrandInfoReq {
+  int64 brand_id = 1;
+}
+
+// 定义响应消息体
+message GetBrandInfoRsp {
+  int64 brand_id = 1;
+  string brand_name = 2;
+  repeated int64 brand_adv_list = 3;
+}
+
+// 定义 rpc 服务
+service HelloService{
+  // 获取商品信息接口
+  rpc GetBrandInfo(GetBrandInfoReq) returns (GetBrandInfoRsp);
+}

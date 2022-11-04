@@ -24,6 +24,11 @@ func SpuServiceNew(ctx *gin.Context) *SpuService {
 	return &svc
 }
 
+// //  CreateSpu create new spu
+// func (s *SpuService) CreateSpu(req *entity.CreateSpuReq) (res *entity.CreateSpuReq, err error) {
+
+// }
+
 // getSpuInfo 获取商品的信息
 func (s *SpuService) GetSpuInfo(req *entity.GetSpuInfoReq) (res *entity.GetSpuInfoRes, err error) {
 	// 直接查数据然后返回

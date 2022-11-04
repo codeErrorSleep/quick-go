@@ -12,7 +12,7 @@
             "mode": "auto",
             "program": "${workspaceFolder}",
             "env": {},
-            "args": ["run", "-p", "8080", "-e", "config"]
+            "args": ["run", "-e", "config"]
         }
     ]
 }

@@ -15,6 +15,10 @@ localKafka:
 
 # 开发的端口
 port: 8080
-
 # 日志记录的目录
 logPath: ./storage/logs/
+
+
+# http port
+httpPort: 8080
+grpcPort: 8081

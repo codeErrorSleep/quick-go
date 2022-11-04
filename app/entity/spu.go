@@ -1,5 +1,13 @@
 package entity
 
+type CreateSpuReq struct {
+	AppID     string `json:"app_id" binding:"required"`
+	GoodsName string `json:"goods_name" binding:"required"`
+	Status    int    `json:"status" binding:"min=0"`
+	Price     int    `json:"price" binding:"min=0"`
+	PriceLine int    `json:"price_line" binding:"min=0"`
+}
+
 type GetSpuInfoReq struct {
 	AppID string `json:"app_id" binding:"required"`
 	SpuID string `json:"spu_id" binding:"required"`

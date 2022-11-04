@@ -24,6 +24,23 @@ func GetSpuInfo(c *gin.Context) {
 	response.Respond(c, data, err)
 }
 
+// CreateSpu create a new spu
+func CreateSpu(c *gin.Context) {
+	// 参数校验
+	req := entity.CreateSpuReq{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.Fail(c, consts.ValidatorParamsCheckFailCode, err.Error(), err)
+		return
+	}
+
+	data := req
+	var err error
+
+	// 调用service
+	// svc := service.SpuServiceNew(c)
+	// data, err := svc.CreateSpu(&req)
+	response.Respond(c, data, err)
+}
 func AsyncRedisList(c *gin.Context) {
 	// 参数校验
 	req := entity.GetSpuInfoReq{}
