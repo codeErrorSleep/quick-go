@@ -17,53 +17,53 @@ var cmdEnv struct {
 	BaseEnv string
 }
 
-func Bootstrap(envMode string) {
+// func Bootstrap(envMode string) {
 
-	// 1.读取配置相关的信息
-	err := InitConfig(envMode)
-	if err != nil {
-		print(err.Error())
-	}
+// 	// 1.读取配置相关的信息
+// 	err := InitConfig(envMode)
+// 	if err != nil {
+// 		print(err.Error())
+// 	}
 
-	// 2.日志系统
-	err = InitLog()
-	if err != nil {
-		print(err.Error())
-	}
+// 	// 2.日志系统
+// 	err = InitLog()
+// 	if err != nil {
+// 		print(err.Error())
+// 	}
 
-	// 3.初始化mysql
-	err = InitMysql()
-	if err != nil {
-		print(err.Error())
-	}
+// 	// 3.初始化mysql
+// 	err = InitMysql()
+// 	if err != nil {
+// 		print(err.Error())
+// 	}
 
-	// 4.初始化redis
-	err = InitRedis()
-	if err != nil {
-		print(err.Error())
-	}
+// 	// 4.初始化redis
+// 	err = InitRedis()
+// 	if err != nil {
+// 		print(err.Error())
+// 	}
 
-	// // 5.创建kafka连接
-	// err = global.InitKafka()
-	// if err != nil {
-	// 	print(err.Error())
-	// }
+// 	// // 5.创建kafka连接
+// 	// err = InitKafka()
+// 	// if err != nil {
+// 	// 	print(err.Error())
+// 	// }
 
-	// // 异步处理请求
-	// go async.AsyncGoodsDetail()
+// 	// // 异步处理请求
+// 	// go async.AsyncGoodsDetail()
 
-	// rpc 服务
-	// grpcServer := grpc.NewServer()
-	// rpc.RegisterHelloServiceServer(grpcServer, &service.HelloService{})
-	// listener, err := net.Listen("tcp", "localhost:"+global.Env.GetString("grpcPort"))
-	// if err != nil {
-	// 	fmt.Println("net Listen err: ", err)
-	// 	return
-	// }
-	// grpcServer.Serve(listener)
-	// defer listener.Close()
+// 	// rpc 服务
+// 	// grpcServer := grpc.NewServer()
+// 	// rpc.RegisterHelloServiceServer(grpcServer, &service.HelloService{})
+// 	// listener, err := net.Listen("tcp", "localhost:"+Env.GetString("grpcPort"))
+// 	// if err != nil {
+// 	// 	fmt.Println("net Listen err: ", err)
+// 	// 	return
+// 	// }
+// 	// grpcServer.Serve(listener)
+// 	// defer listener.Close()
 
-}
+// }
 
 // InitConfig 初始化配置
 func InitConfig(envMode string) error {

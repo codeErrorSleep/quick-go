@@ -1,19 +1,17 @@
 package main
 
 import (
+	"quick-go/bootstrap"
 	"quick-go/global"
 	"quick-go/global/consts"
-	"quick-go/routers"
 
 	"go.uber.org/zap"
 )
 
 func main() {
 	defer resourceCloser()
-	global.Bootstrap(consts.EnvProduction)
+	bootstrap.Bootstrap(consts.EnvProduction)
 
-	r := routers.InitApiRouter(false)
-	r.Run(":" + global.Env.GetString("httpPort"))
 }
 
 // 关闭所有的连接资源
