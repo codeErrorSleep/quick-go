@@ -3,6 +3,7 @@ package global
 import (
 	"flag"
 	"log"
+	"quick-go/global/consts"
 
 	"github.com/spf13/viper"
 )
@@ -12,40 +13,90 @@ var (
 )
 
 var cmdEnv struct {
-	Env  string
-	Port int64
+	Env     string
+	BaseEnv string
+}
+
+func Bootstrap(envMode string) {
+
+	// 1.读取配置相关的信息
+	err := InitConfig(envMode)
+	if err != nil {
+		print(err.Error())
+	}
+
+	// 2.日志系统
+	err = InitLog()
+	if err != nil {
+		print(err.Error())
+	}
+
+	// 3.初始化mysql
+	err = InitMysql()
+	if err != nil {
+		print(err.Error())
+	}
+
+	// 4.初始化redis
+	err = InitRedis()
+	if err != nil {
+		print(err.Error())
+	}
+
+	// // 5.创建kafka连接
+	// err = global.InitKafka()
+	// if err != nil {
+	// 	print(err.Error())
+	// }
+
+	// // 异步处理请求
+	// go async.AsyncGoodsDetail()
+
+	// rpc 服务
+	// grpcServer := grpc.NewServer()
+	// rpc.RegisterHelloServiceServer(grpcServer, &service.HelloService{})
+	// listener, err := net.Listen("tcp", "localhost:"+global.Env.GetString("grpcPort"))
+	// if err != nil {
+	// 	fmt.Println("net Listen err: ", err)
+	// 	return
+	// }
+	// grpcServer.Serve(listener)
+	// defer listener.Close()
+
 }
 
 // InitConfig 初始化配置
-func InitConfig() error {
+func InitConfig(envMode string) error {
 	// 读取命令行参数
-	registerCmdEnvConfig()
+	registerCmdEnvConfig(envMode)
 
 	// 读取配置的conf文件
 	err := registerEnvConfig()
 	if err != nil {
 		return err
 	}
-
-	// 设置一下其他的变量
-	Env.Set("port", cmdEnv.Port)
-
 	return nil
 }
 
 // 读取命令行参数
-func registerCmdEnvConfig() {
+func registerCmdEnvConfig(envMode string) {
 	envFile := flag.String("e", "config", "配置文件")
-	port := flag.Int64("p", 8080, "启动端口")
+	bashEnv := flag.String("b", "./", "根目录相对路径")
 	flag.Parse()
+
+	if envMode == consts.EnvUnitTest {
+		cmdEnv.BaseEnv = "../"
+	}
+
 	cmdEnv.Env = *envFile
-	cmdEnv.Port = *port
+	cmdEnv.BaseEnv = *bashEnv
+
 }
 
 // 读取config配置文件
 func registerEnvConfig() error {
 	viperObj := viper.New()
-	viperObj.SetConfigName("conf/" + cmdEnv.Env)
+	viperObj.SetConfigName(cmdEnv.BaseEnv + "conf/" + cmdEnv.Env)
 	viperObj.SetConfigType("yaml")
 	viperObj.AddConfigPath(".")
 	err := viperObj.ReadInConfig()

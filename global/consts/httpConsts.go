@@ -4,6 +4,9 @@ const (
 	//系统配置
 
 	ErrorsConfigInitFail string = "初始化配置文件发生错误"
+	EnvProduction        string = "production"
+	EnvDev               string = "envDev"
+	EnvUnitTest          string = "unit-test"
 
 	// 表单验证器前缀
 	ValidatorPrefix              string = "Form_Validator_"

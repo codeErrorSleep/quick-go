@@ -9,6 +9,7 @@ gin+gorm
 
 
 # todo
+- 单元测试
 - dockerfile支持
 - 加个简易库存模型
 
