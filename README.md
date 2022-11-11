@@ -9,12 +9,17 @@ gin+gorm
 
 
 # todo
-- 单元测试
+- 集成测试,mock测试
+- 集成依赖注入
 - dockerfile支持
-- 加个简易库存模型
+- 服务器docker支持
+- 流水线部署
+- 部署上k8s
+
 
 # done
 - grpc
+- 单元测试
 - 开启的资源guanbi
 - kafka测试
 - gin合成
