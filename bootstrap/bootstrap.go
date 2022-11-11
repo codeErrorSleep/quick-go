@@ -2,7 +2,6 @@ package bootstrap
 
 import (
 	"quick-go/global"
-	"quick-go/routers"
 )
 
 func Bootstrap(envMode string) {
@@ -50,8 +49,5 @@ func Bootstrap(envMode string) {
 	// }
 	// grpcServer.Serve(listener)
 	// defer listener.Close()
-
-	r := routers.InitApiRouter(false)
-	r.Run(":" + global.Env.GetString("httpPort"))
 
 }

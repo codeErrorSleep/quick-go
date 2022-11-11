@@ -84,13 +84,13 @@ func registerCmdEnvConfig(envMode string) {
 	bashEnv := flag.String("b", "./", "根目录相对路径")
 	flag.Parse()
 
-	if envMode == consts.EnvUnitTest {
-		cmdEnv.BaseEnv = "../"
-	}
-
 	cmdEnv.Env = *envFile
 	cmdEnv.BaseEnv = *bashEnv
 
+	// 单测的固定启动参数
+	if envMode == consts.EnvUnitTest {
+		cmdEnv.BaseEnv = "../"
+	}
 }
 
 // 读取config配置文件
