@@ -14,7 +14,9 @@ func InitApiRouter(test bool) *gin.Engine {
 	router := gin.Default()
 
 	//全局中间件
-	if !test {
+	if test {
+		gin.SetMode("test")
+	} else {
 		router.Use(logging2.Logging()) //日志中间件
 		router.Use(cors2.CORS())       //跨域中间件
 	}
