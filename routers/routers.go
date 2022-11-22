@@ -9,6 +9,22 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type Router struct {
+	stock controllers.StockController
+}
+
+func NewRouter(stockController controllers.StockController) *Router {
+	router := &Router{
+		stock: stockController,
+	}
+	return router
+}
+
+func (r *Router) With(engine *gin.Engine) {
+	engine.POST("/reduce_stock", r.stock.ReduceStock)
+	engine.POST("/get_spu_stock", r.stock.GetSpuStock)
+}
+
 // InitApiRouter ...
 func InitApiRouter(test bool) *gin.Engine {
 	router := gin.Default()
@@ -26,23 +42,23 @@ func InitApiRouter(test bool) *gin.Engine {
 		ctx.String(http.StatusOK, "hello logistics")
 	})
 
-	stockAPI := router.Group("/stock/")
-	{
-		stockAPI.POST("/reduce_stock", controllers.ReduceStock)
-		stockAPI.POST("/get_spu_stock", controllers.GetSpuStock)
-		// stockAPI.POST("/get_spu_stock", cache_middleware.SetRedisCache(100), controllers.GetSpuStock)
-	}
+	// stockAPI := router.Group("/stock/")
+	// {
+	// 	stockAPI.POST("/reduce_stock", controllers.ReduceStock)
+	// 	stockAPI.POST("/get_spu_stock", controllers.GetSpuStock)
+	// 	// stockAPI.POST("/get_spu_stock", cache_middleware.SetRedisCache(100), controllers.GetSpuStock)
+	// }
 
-	spuAPI := router.Group("/spu/")
-	{
-		spuAPI.POST("/get_spu_info", controllers.GetSpuInfo)
-		spuAPI.POST("/create_test_val", controllers.CreateSpu)
-	}
+	// spuAPI := router.Group("/spu/")
+	// {
+	// 	spuAPI.POST("/get_spu_info", controllers.GetSpuInfo)
+	// 	spuAPI.POST("/create_test_val", controllers.CreateSpu)
+	// }
 
-	kafkaAPI := router.Group("/kafka/")
-	{
-		kafkaAPI.POST("createdManyMessages", controllers.CreateManyMessages)
-	}
+	// kafkaAPI := router.Group("/kafka/")
+	// {
+	// 	kafkaAPI.POST("createdManyMessages", controllers.CreateManyMessages)
+	// }
 
 	// AsyncAPI := router.Group("/async/")
 	// {

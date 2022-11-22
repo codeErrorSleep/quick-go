@@ -4,20 +4,18 @@ import (
 	"context"
 	"quick-go/app/models"
 	"quick-go/global"
-
-	"gorm.io/gorm"
 )
 
 type mysqlStockRepository struct {
-	DB *gorm.DB
+	data *global.Data
 }
 
-func NewMysqlStockRepository() IStockRepo {
-	return &mysqlStockRepository{global.LocalMysql}
+func NewMysqlStockRepository(data *global.Data) IStockRepo {
+	return &mysqlStockRepository{data}
 }
 
 func (m *mysqlStockRepository) GetStockDetail(ctx context.Context, appID string, spuID string) (stockList []models.Stock, err error) {
-	query := global.LocalMysql.
+	query := m.data.LocalMysql.
 		Table((&models.Stock{}).TableName(appID)).
 		Where("app_id = ?", appID).
 		Where("spu_id = ?", spuID).

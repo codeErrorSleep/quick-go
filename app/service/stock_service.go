@@ -4,18 +4,17 @@ import (
 	"fmt"
 	"quick-go/app/entity"
 	"quick-go/app/models"
+	"quick-go/app/repo"
 	"quick-go/global/consts"
 	"quick-go/utils/quickErrors"
-
-	"github.com/gin-gonic/gin"
 )
 
 type StockService struct {
-	ctx *gin.Context
+	stockRepo repo.IStockRepo
 }
 
-func StockServiceNew(ctx *gin.Context) *StockService {
-	svc := StockService{ctx: ctx}
+func NewStockService(stockRepo repo.IStockRepo) IStockService {
+	svc := StockService{stockRepo: stockRepo}
 	return &svc
 }
 

@@ -1,35 +1,27 @@
 package repo
 
-import (
-	"context"
-	"quick-go/app/models"
-	"quick-go/global"
+// type mysqlSpuRepository struct {
+// 	DB *gorm.DB
+// }
 
-	"gorm.io/gorm"
-)
+// func NewMysqlSpuRepository(db *gorm.DB) ISpuRepo {
+// 	if db != nil {
+// 		return &mysqlSpuRepository{db}
+// 	}
+// 	return &mysqlSpuRepository{global.LocalMysql}
+// }
 
-type mysqlSpuRepository struct {
-	DB *gorm.DB
-}
+// func (m *mysqlSpuRepository) GetSpuDetail(ctx context.Context, appID string, spuID string) (spuDetail models.Spu, err error) {
+// 	query := m.DB.WithContext(ctx).
+// 		Table((&models.Spu{}).TableName(appID)).
+// 		Where("app_id = ?", appID).
+// 		Where("spu_id = ?", spuID).
+// 		Where("is_deleted = ?", 0)
 
-func NewMysqlSpuRepository(db *gorm.DB) ISpuRepo {
-	if db != nil {
-		return &mysqlSpuRepository{db}
-	}
-	return &mysqlSpuRepository{global.LocalMysql}
-}
+// 	err = query.First(&spuDetail).Error
 
-func (m *mysqlSpuRepository) GetSpuDetail(ctx context.Context, appID string, spuID string) (spuDetail models.Spu, err error) {
-	query := m.DB.WithContext(ctx).
-		Table((&models.Spu{}).TableName(appID)).
-		Where("app_id = ?", appID).
-		Where("spu_id = ?", spuID).
-		Where("is_deleted = ?", 0)
-
-	err = query.First(&spuDetail).Error
-
-	if err != nil {
-		return spuDetail, err
-	}
-	return
-}
+// 	if err != nil {
+// 		return spuDetail, err
+// 	}
+// 	return
+// }
