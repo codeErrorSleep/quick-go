@@ -11,11 +11,13 @@ import (
 
 type Router struct {
 	stock controllers.StockController
+	// spu   controllers.SpuController
 }
 
 func NewRouter(stockController controllers.StockController) *Router {
 	router := &Router{
 		stock: stockController,
+		// spu:   spuController,
 	}
 	return router
 }
