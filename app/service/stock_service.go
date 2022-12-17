@@ -1,9 +1,9 @@
 package service
 
 import (
+	"context"
 	"fmt"
 	"quick-go/app/entity"
-	"quick-go/app/models"
 	"quick-go/app/repo"
 	"quick-go/global/consts"
 	"quick-go/utils/quickErrors"
@@ -24,8 +24,7 @@ func (s *StockService) GetSpuStock(req *entity.GetSpuStockReq) (resData *entity.
 	spuID := req.SpuID
 
 	// 获取stock的信息
-	stock := models.Stock{}
-	stockList, err := stock.GetStockDetail(appID, spuID)
+	stockList, err := s.stockRepo.GetStockDetail(context.TODO(), appID, spuID)
 	if err != nil {
 		return nil, quickErrors.New(consts.CurdSelectFailCode, fmt.Sprint(req.AppID, req.SpuID), consts.CurdSelectFailMsg)
 	}

@@ -9,8 +9,6 @@ gin+gorm
 
 
 # todo
-- 集成测试,mock测试
-- 集成依赖注入
 - dockerfile支持
 - 服务器docker支持
 - 流水线部署
@@ -18,6 +16,7 @@ gin+gorm
 
 
 # done
+- 集成测试,mock测试
 - grpc
 - 单元测试
 - 开启的资源guanbi
@@ -25,7 +24,7 @@ gin+gorm
 - gin合成
 - 中间件日志
 - 中间件缓存
-
+- 集成依赖注入
 
 
 # 模块
