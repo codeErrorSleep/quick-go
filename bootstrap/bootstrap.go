@@ -18,17 +18,17 @@ func Bootstrap(envMode string) {
 		print(err.Error())
 	}
 
-	// 3.初始化mysql
-	err = global.InitMysql()
-	if err != nil {
-		print(err.Error())
-	}
+	// // 3.初始化mysql
+	// err = global.InitMysql()
+	// if err != nil {
+	// 	print(err.Error())
+	// }
 
-	// 4.初始化redis
-	err = global.InitRedis()
-	if err != nil {
-		print(err.Error())
-	}
+	// // 4.初始化redis
+	// err = global.InitRedis()
+	// if err != nil {
+	// 	print(err.Error())
+	// }
 
 	// // 5.创建kafka连接
 	// err = global.InitKafka()

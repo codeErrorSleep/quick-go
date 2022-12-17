@@ -24,62 +24,108 @@ var (
 	ResourceCloses []func() error
 )
 
-func InitMysql() (err error) {
-	// 建立 MySQL 连接
-	LocalMysql, err = mysqlConnect("db_goods_center", "dbLocal")
-	if err != nil {
-		return err
-	}
-	return nil
+type Data struct {
+	// mysql 链接
+	LocalMysql *gorm.DB
+
+	// redis连接
+	LocalRedis *redis.Client
+
+	// kafka连接
+	KafkaProLocal sarama.AsyncProducer
+	KafkaConLocal sarama.Consumer
+	// 连接资源关闭
+	Closes []func() error
 }
 
-func InitKafka() (err error) {
-	KafkaProLocal, KafkaConLocal, err = kafkaConnect("localhost:9092")
-	if err != nil {
-		return err
-	}
-	return nil
-}
+func NewData() (d *Data, cf func(), err error) {
+	d = &Data{}
 
-func InitRedis() (err error) {
-	RedisLocal, err = redisConnect("redisLocal")
+	// mysql
+	d.LocalMysql, err = mysqlConnect("db_goods_center", "dbLocal")
 	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func kafkaConnect(addr string) (sarama.AsyncProducer, sarama.Consumer, error) {
-	kafkaConf := sarama.NewConfig()
-	kafkaConf.Producer.Return.Successes = true
-	kafkaConf.Producer.Partitioner = sarama.NewRandomPartitioner
-
-	kafkaAddr := []string{
-		// Env.GetString(addr + ".addr"), // Addr, in form of `Host:Port``
-		addr,
-	}
-	KafkaClient, err := sarama.NewClient(kafkaAddr, kafkaConf)
-	if err != nil {
-		ErrorLogger.Info("", zap.Error(err), zap.Any("kafkaAddr", kafkaAddr), zap.Any("kafkaConf", kafkaConf))
 		return nil, nil, err
 	}
-	// 生成 Kafka 生产者、消费者
-	KafkaProducer, err := sarama.NewAsyncProducerFromClient(KafkaClient)
-	if err != nil {
-		ErrorLogger.Info("", zap.Error(err), zap.Any("KafkaClient", KafkaClient))
-		return nil, nil, err
+	if rawDB, err := d.LocalMysql.DB(); err != nil {
+		d.Closes = append(d.Closes, rawDB.Close)
 	}
-	KafkaConsumer, err := sarama.NewConsumerFromClient(KafkaClient)
-	if err != nil {
-		ErrorLogger.Info("", zap.Error(err), zap.Any("KafkaClient", KafkaClient))
-		return nil, nil, err
-	}
-	// 资源关闭连接
-	// ResourceCloses = append(ResourceCloses, KafkaConsumer.Close)
-	// ResourceCloses = append(ResourceCloses, KafkaProLocal.Close)
 
-	return KafkaProducer, KafkaConsumer, nil
+	// redis
+	d.LocalRedis, err = redisConnect("redisLocal")
+	if err != nil {
+		return nil, nil, err
+	}
+	d.Closes = append(d.Closes, d.LocalRedis.Close)
+
+	// kafka
+	return d, d.Close, nil
 }
+
+func (d *Data) Close() {
+	for _, close := range d.Closes {
+		if err := close(); err != nil {
+			// TODO: error handling
+			ErrorLogger.Error(err.Error())
+		}
+	}
+}
+
+// func InitMysql() (err error) {
+// 	// 建立 MySQL 连接
+// 	LocalMysql, err = mysqlConnect("db_goods_center", "dbLocal")
+// 	if err != nil {
+// 		return err
+// 	}
+// 	return nil
+// }
+
+// func InitKafka() (err error) {
+// 	KafkaProLocal, KafkaConLocal, err = kafkaConnect("localhost:9092")
+// 	if err != nil {
+// 		return err
+// 	}
+// 	return nil
+// }
+
+// func InitRedis() (err error) {
+// 	RedisLocal, err = redisConnect("redisLocal")
+// 	if err != nil {
+// 		return err
+// 	}
+// 	return nil
+// }
+
+// func kafkaConnect(addr string) (sarama.AsyncProducer, sarama.Consumer, error) {
+// 	kafkaConf := sarama.NewConfig()
+// 	kafkaConf.Producer.Return.Successes = true
+// 	kafkaConf.Producer.Partitioner = sarama.NewRandomPartitioner
+
+// 	kafkaAddr := []string{
+// 		// Env.GetString(addr + ".addr"), // Addr, in form of `Host:Port``
+// 		addr,
+// 	}
+// 	KafkaClient, err := sarama.NewClient(kafkaAddr, kafkaConf)
+// 	if err != nil {
+// 		ErrorLogger.Info("", zap.Error(err), zap.Any("kafkaAddr", kafkaAddr), zap.Any("kafkaConf", kafkaConf))
+// 		return nil, nil, err
+// 	}
+// 	// 生成 Kafka 生产者、消费者
+// 	KafkaProducer, err := sarama.NewAsyncProducerFromClient(KafkaClient)
+// 	if err != nil {
+// 		ErrorLogger.Info("", zap.Error(err), zap.Any("KafkaClient", KafkaClient))
+// 		return nil, nil, err
+// 	}
+// 	KafkaConsumer, err := sarama.NewConsumerFromClient(KafkaClient)
+// 	if err != nil {
+// 		ErrorLogger.Info("", zap.Error(err), zap.Any("KafkaClient", KafkaClient))
+// 		return nil, nil, err
+// 	}
+// 	// 资源关闭连接
+// 	// ResourceCloses = append(ResourceCloses, KafkaConsumer.Close)
+// 	// ResourceCloses = append(ResourceCloses, KafkaProLocal.Close)
+
+// 	return KafkaProducer, KafkaConsumer, nil
+// }
 
 // 初始化连接
 func redisConnect(key string) (rdb *redis.Client, err error) {

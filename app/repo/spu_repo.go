@@ -4,23 +4,18 @@ import (
 	"context"
 	"quick-go/app/models"
 	"quick-go/global"
-
-	"gorm.io/gorm"
 )
 
 type mysqlSpuRepository struct {
-	DB *gorm.DB
+	data *global.Data
 }
 
-func NewMysqlSpuRepository(db *gorm.DB) ISpuRepo {
-	if db != nil {
-		return &mysqlSpuRepository{db}
-	}
-	return &mysqlSpuRepository{global.LocalMysql}
+func NewMysqlSpuRepository(data *global.Data) ISpuRepo {
+	return &mysqlSpuRepository{data}
 }
 
 func (m *mysqlSpuRepository) GetSpuDetail(ctx context.Context, appID string, spuID string) (spuDetail models.Spu, err error) {
-	query := m.DB.WithContext(ctx).
+	query := m.data.LocalMysql.WithContext(ctx).
 		Table((&models.Spu{}).TableName(appID)).
 		Where("app_id = ?", appID).
 		Where("spu_id = ?", spuID).

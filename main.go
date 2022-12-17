@@ -4,7 +4,6 @@ import (
 	"quick-go/bootstrap"
 	"quick-go/global"
 	"quick-go/global/consts"
-	"quick-go/routers"
 
 	"go.uber.org/zap"
 )
@@ -13,8 +12,16 @@ func main() {
 	defer resourceCloser()
 	bootstrap.Bootstrap(consts.EnvProduction)
 
-	r := routers.InitApiRouter(false)
-	r.Run(":" + global.Env.GetString("httpPort"))
+	app, cleanup, err := InitServer()
+	if err != nil {
+		panic(err)
+	}
+	defer cleanup()
+
+	app.Start()
+
+	// r := routers.InitApiRouter(false)
+	// r.Run(":" + global.Env.GetString("httpPort"))
 
 }
 

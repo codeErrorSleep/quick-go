@@ -9,8 +9,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type SpuController struct {
+	SpuService service.SpuService
+}
+
+func NewSpuController(ss service.SpuService) SpuController {
+	controller := SpuController{
+		SpuService: ss,
+	}
+	return controller
+}
+
 // GetSpuInfo 获取商品信息
-func GetSpuInfo(c *gin.Context) {
+func (sc *SpuController) GetSpuInfo(c *gin.Context) {
 	// 参数校验
 	req := entity.GetSpuInfoReq{}
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -19,13 +30,12 @@ func GetSpuInfo(c *gin.Context) {
 	}
 
 	// 调用service
-	svc := service.SpuServiceNew(c)
-	data, err := svc.GetSpuInfo(&req)
+	data, err := sc.SpuService.GetSpuInfo(&req)
 	response.Respond(c, data, err)
 }
 
 // CreateSpu create a new spu
-func CreateSpu(c *gin.Context) {
+func (sc *SpuController) CreateSpu(c *gin.Context) {
 	// 参数校验
 	req := entity.CreateSpuReq{}
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -33,15 +43,14 @@ func CreateSpu(c *gin.Context) {
 		return
 	}
 
-	data := req
-	var err error
+	// data := req
+	// var err error
 
 	// 调用service
-	// svc := service.SpuServiceNew(c)
-	// data, err := svc.CreateSpu(&req)
+	data, err := sc.SpuService.CreateSpu(&req)
 	response.Respond(c, data, err)
 }
-func AsyncRedisList(c *gin.Context) {
+func (sc *SpuController) AsyncRedisList(c *gin.Context) {
 	// 参数校验
 	req := entity.GetSpuInfoReq{}
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -50,7 +59,6 @@ func AsyncRedisList(c *gin.Context) {
 	}
 
 	// 调用service
-	svc := service.SpuServiceNew(c)
-	data, err := svc.AsyncRedisList(&req)
+	data, err := sc.SpuService.AsyncRedisList(&req)
 	response.Respond(c, data, err)
 }

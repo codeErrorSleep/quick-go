@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"quick-go/app/entity"
@@ -11,28 +12,26 @@ import (
 	"time"
 
 	"github.com/Shopify/sarama"
-	"github.com/gin-gonic/gin"
 )
 
 type SpuService struct {
-	ctx     *gin.Context
 	SpuRepo repo.ISpuRepo
 }
 
-func SpuServiceNew(ctx *gin.Context) *SpuService {
-	svc := SpuService{ctx: ctx, SpuRepo: repo.NewMysqlSpuRepository(nil)}
+func NewSpuService(spuRepo repo.ISpuRepo) *SpuService {
+	svc := SpuService{SpuRepo: spuRepo}
 	return &svc
 }
 
-// //  CreateSpu create new spu
-// func (s *SpuService) CreateSpu(req *entity.CreateSpuReq) (res *entity.CreateSpuReq, err error) {
-
-// }
+//  CreateSpu create new spu
+func (s *SpuService) CreateSpu(req *entity.CreateSpuReq) (res *entity.CreateSpuReq, err error) {
+	return res, nil
+}
 
 // getSpuInfo 获取商品的信息
 func (s *SpuService) GetSpuInfo(req *entity.GetSpuInfoReq) (res *entity.GetSpuInfoRes, err error) {
 	// 直接查数据然后返回
-	spuInfo, err := s.SpuRepo.GetSpuDetail(s.ctx, req.AppID, req.SpuID)
+	spuInfo, err := s.SpuRepo.GetSpuDetail(context.TODO(), req.AppID, req.SpuID)
 	if err != nil {
 		return nil, quickErrors.New(consts.CurdSelectErrorCode, consts.CurdSelectErrorMsg, err.Error())
 	}
