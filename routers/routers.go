@@ -23,6 +23,10 @@ func NewRouter(stockController controllers.StockController) *Router {
 }
 
 func (r *Router) With(engine *gin.Engine) {
+	engine.GET("/", func(ctx *gin.Context) {
+		ctx.String(http.StatusOK, "hello my son")
+	})
+
 	engine.POST("/reduce_stock", r.stock.ReduceStock)
 	engine.POST("/get_spu_stock", r.stock.GetSpuStock)
 }
