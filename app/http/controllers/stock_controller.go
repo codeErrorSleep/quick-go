@@ -43,3 +43,34 @@ func (sc *StockController) GetSpuStock(c *gin.Context) {
 	// var err error
 	response.Respond(c, resData, err)
 }
+
+// ReduceStock 删减库存
+func (sc *StockController) ReduceStock1(c *gin.Context) {
+
+}
+
+// ReduceStock 删减库存
+func (sc *StockController) ReduceStock2(c *gin.Context) {
+
+}
+
+// ReduceStock 删减库存
+func (sc *StockController) ReduceStock3(c *gin.Context) {
+
+}
+
+// ReduceStock 删减库存
+
+// ReduceStock 删减库存
+// ReduceStock 删减库存
+
+// ReduceStock 删减库存
+// ReduceStock 删减库存
+
+// ReduceStock 删减库存
+// ReduceStock 删减库存
+
+// ReduceStock 删减库存
+// ReduceStock 删减库存
+
+// ReduceStock 删减库存
