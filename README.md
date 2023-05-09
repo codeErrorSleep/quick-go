@@ -10,12 +10,14 @@ gin+gorm
 
 # todo
 - dockerfile支持
-- 服务器docker支持
 - 流水线部署
 - 部署上k8s
+- 集成protobuf模块
+- 集成grpc
 
 
 # done
+- 服务器docker支持
 - 集成测试,mock测试
 - grpc
 - 单元测试
