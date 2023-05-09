@@ -25,4 +25,5 @@ COPY --from=builder /app/ ./
 ENTRYPOINT ["./quick-go","run", "-e", "config-docker","-b","./"]
 
 # 生成命令
+# docker build -t quick .
 # docker run -d --name quick-test --network host quick
